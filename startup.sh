@@ -13,15 +13,15 @@ psql -d classroom -c "DROP TABLE IF EXISTS purchases; CREATE TABLE purchases(id 
 psql -d classroom -c "DROP TABLE IF EXISTS clicks; CREATE TABLE clicks(id INT PRIMARY KEY, email VARCHAR(100), timestamp VARCHAR(100), uri VARCHAR(512), number INT);" > startup.log 2>&1
 psql -d classroom -c "DROP TABLE IF EXISTS connect_purchases; CREATE TABLE connect_purchases(id INT PRIMARY KEY, username VARCHAR(100), currency VARCHAR(10), amount INT);" > startup.log 2>&1
 psql -d classroom -c "DROP TABLE IF EXISTS connect_clicks; CREATE TABLE connect_clicks(id INT PRIMARY KEY, email VARCHAR(100), timestamp VARCHAR(100), uri VARCHAR(512), number INT);" > startup.log 2>&1
-psql -d classroom -c "COPY purchases(id,username,currency,amount)  FROM '/home/workspace/startup/purchases.csv' DELIMITER ',' CSV HEADER;" > startup.log 2>&1
-psql -d classroom -c "COPY clicks(id,email,timestamp,uri,number)  FROM '/home/workspace/startup/clicks.csv' DELIMITER ',' CSV HEADER;" > startup.log 2>&1
+psql -d classroom -c "COPY purchases(id,username,currency,amount)  FROM '/home/$USER/startup/purchases.csv' DELIMITER ',' CSV HEADER;" > startup.log 2>&1
+psql -d classroom -c "COPY clicks(id,email,timestamp,uri,number)  FROM '/home/$USER/startup/clicks.csv' DELIMITER ',' CSV HEADER;" > startup.log 2>&1
 
 su postgres -c "createuser cta_admin -s" > startup.log 2>&1
 createdb cta > startup.log 2>&1
 psql -d cta -c "ALTER USER cta_admin WITH PASSWORD 'chicago'" > startup.log 2>&1
 psql -d cta -c "CREATE TABLE stations (stop_id INTEGER PRIMARY KEY, direction_id VARCHAR(1) NOT NULL, stop_name VARCHAR(70) NOT NULL, station_name VARCHAR(70) NOT NULL, station_descriptive_name VARCHAR(200) NOT NULL, station_id INTEGER NOT NULL, \"order\" INTEGER, red BOOLEAN NOT NULL, blue BOOLEAN NOT NULL, green BOOLEAN NOT NULL);" > startup.log 2>&1
 
-psql -d cta -c "COPY stations(stop_id, direction_id,stop_name,station_name,station_descriptive_name,station_id,\"order\",red,blue,green) FROM '/home/workspace/startup/cta_stations.csv' DELIMITER ',' CSV HEADER;" > startup.log 2>&1
+psql -d cta -c "COPY stations(stop_id, direction_id,stop_name,station_name,station_descriptive_name,station_id,\"order\",red,blue,green) FROM '/home/$USER/startup/cta_stations.csv' DELIMITER ',' CSV HEADER;" > startup.log 2>&1
 
 # Configure lesson 6 and 7 streams
 kafka-topics --delete  --bootstrap-server localhost:9092 --topic com.udacity.streams.users > startup.log 2>&1
@@ -35,8 +35,8 @@ kafka-topics --create  --bootstrap-server localhost:9092 --topic com.udacity.str
 
 # Configure the directory structure for KSQL
 mkdir -p /var/lib/kafka-streams
-chmod g+rwx /var/lib/kafka-streams
-chgrp -R confluent /var/lib/kafka-streams
+sudo chmod g+rwx /var/lib/kafka-streams
+sudo chgrp -R confluent /var/lib/kafka-streams
 
 echo "Fin Instalacion"
 
