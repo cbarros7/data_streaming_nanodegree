@@ -1,5 +1,4 @@
-sudo su
-#echo 'schema.registry.url=http://localhost:8081' >>  /etc/kafka/connect-distributed.properties
+echo 'schema.registry.url=http://localhost:8081' >>  /etc/kafka/connect-distributed.properties
 systemctl start confluent-zookeeper >  startup.log 2>&1
 systemctl start confluent-kafka >  startup.log 2>&1
 systemctl start confluent-schema-registry >  startup.log 2>&1
