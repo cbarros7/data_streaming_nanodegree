@@ -4,34 +4,54 @@
 [![Twitter Carlos](https://img.shields.io/twitter/follow/cbarros27?label=CarlosBarros&style=social)](https://twitter.com/cbarros27)
 
 
-### Installation 
-#### 1. Clone the repository
+## Installation 
+### 1. Clone the repository
 Use the following command to clone the repository: 
 
 Then enter the [Configuration](./data_streaming_nanodegree-/Configuration/) folder and run the ``config.sh`` command. 
 
-- Give necessary run permissions: ``chmod u+x config.sh``
-- Execute the script: ``./config.sh``
+* Give necessary run permissions: ``chmod u+x *.sh``
+* Execute the script: ``sudo sh /home/$USER/data_streaming_nanodegree/Configuration/installDocker.sh``
+* The following commands are used to run the Docker command without Sudo. Type the following commands in the terminal: 
+
+```
+sudo usermod -aG docker ${USER}
+su - ${USER}
+```
+
+* Finally, execute the script: ``sudo sh /home/$USER/data_streaming_nanodegree/Configuration/config.sh``
+
+### 2. Additional configuration 
 
 Once the script is finished, please copy and paste the following script into the terminal: 
+
 ```
 export PATH=$PATH:/home/$USER/kafka_2.13-3.1.0/bin
 source ~/.bashrc
 ```
 
-#### 2. First commands
+And finally, the following script is executed to prepare the environment that will be used to work with Udacity.
+
+``
+sudo sh /home/$USER/data_streaming_nanodegree/startup.sh
+``
+
+
+### 3. First commands with Kafka
 ##### Create a topic with 3 partitions and a replica
 
 ```
 kafka-topics.sh --create --bootstrap-server localhost:9092 --topic "test"  --replication-factor 1 --partitions 1
 ```
 
-<br>
-
 ##### List topics
 ```
 kafka-topics --list --bootstrap-server localhost:9092
 ```
+
+kafka-console-producer --topic "test2" --broker-list localhost:9092
+
+kafka-console-consumer --topic "test2" --bootstrap-server localhost:9092
 
 ##### Describe the previously created topic
 ```
@@ -39,7 +59,7 @@ kafka-topics.sh --zookeper localhost:2181 --topic "test" --describe
 ```
 
 
-### Disclaimer
+## Disclaimer
 
 This script is based on the course taken at **A Cloud Guru** called [Kafka deep dive](https://github.com/linuxacademy/content-kafka-deep-dive). It has been updated to the latest version of *Zookeeper*. 
 
@@ -47,7 +67,7 @@ This script is based on the course taken at **A Cloud Guru** called [Kafka deep 
 
 <br>
 
-### Acknowledgements :pray:
+## Acknowledgements :pray:
 Thanks to all the teachers, mentors and colleagues of **Udacity** who have been supportive in this nanodegree. It was undoubtedly a great experience both personally and professionally.
 
 
