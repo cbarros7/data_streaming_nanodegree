@@ -13,15 +13,25 @@ Then enter the [Configuration](./data_streaming_nanodegree-/Configuration/) fold
 - Give necessary run permissions: ``chmod u+x config.sh``
 - Execute the script: ``./config.sh``
 
+Once the script is finished, please copy and paste the following script into the terminal: 
+```
+export PATH=$PATH:/home/$USER/kafka_2.13-3.1.0/bin
+source ~/.bashrc
+```
+
 #### 2. First commands
 ##### Create a topic with 3 partitions and a replica
 
 ```
-kafka-topics.sh --zookeeper localhost:2181 --create --topic "test" --partition 3 --replication-factor 1
-
+kafka-topics.sh --create --bootstrap-server localhost:9092 --topic "test"  --replication-factor 1 --partitions 1
 ```
 
 <br>
+
+##### List topics
+```
+kafka-topics --list --bootstrap-server localhost:9092
+```
 
 ##### Describe the previously created topic
 ```
