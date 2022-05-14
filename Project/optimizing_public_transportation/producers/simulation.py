@@ -56,6 +56,7 @@ class TimeSimulation:
         ]
 
     def run(self):
+        print("ENTRO A EJECUTAR")
         curr_time = datetime.datetime.utcnow().replace(
             hour=0, minute=0, second=0, microsecond=0
         )

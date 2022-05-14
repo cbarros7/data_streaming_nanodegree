@@ -33,17 +33,16 @@ class TransformedStation(faust.Record):
 #   places it into a new topic with only the necessary information.
 app = faust.App("stations-stream", broker="kafka://localhost:9092", store="memory://")
 # TODO: Define the input Kafka Topic. Hint: What topic did Kafka Connect output to?
-# topic = app.topic("TODO", value_type=Station)
+topic = app.topic("com.cta.stations", value_type=Station) # CTA_ is the prefixd difined on producers/connector.py line 60
 # TODO: Define the output Kafka Topic
-# out_topic = app.topic("TODO", partitions=1)
+out_topic = app.topic("com.cta.stations.transformed", partitions=1)
 # TODO: Define a Faust Table
-#table = app.Table(
-#    # "TODO",
-#    # default=TODO,
-#    partitions=1,
-#    changelog_topic=out_topic,
-#)
-
+table = app.Table(
+   "stations_sum",
+   default=TransformedStation, # TransformedStation object type
+   partitions=1,
+   changelog_topic=out_topic,
+)
 
 #
 #
@@ -53,6 +52,30 @@ app = faust.App("stations-stream", broker="kafka://localhost:9092", store="memor
 #
 #
 
+@app.agent(topic)
+async def transform_station(stations):
+    async for stationevent in stations:
+        #print(stationevent)
+
+        line = None
+        if stationevent.red:
+            line = "red"
+        elif stationevent.blue:
+            line = "blue"
+        else:
+            line = "green"
+
+        # We need to add those data to the table not sending them as topics due to the rubric
+        # and use the station_id as a Table ID that contains transformed data.
+
+        # We use the table as we will only have the latest station and when another station
+        # comes up for the same id it will overwrite the old one. Then we will have the latest
+        # record for each station.
+        transformed_station = TransformedStation(stationevent.station_id, 
+                                                stationevent.station_name, 
+                                                stationevent.order,
+                                                line)
+        table[stationevent.station_id] = transformed_station
 
 if __name__ == "__main__":
     app.main()

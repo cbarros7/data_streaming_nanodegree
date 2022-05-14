@@ -20,7 +20,16 @@ KSQL_URL = "http://localhost:8088"
 #       `turnstile` table and grouping on station_id.
 #       Make sure to cast the COUNT of station id to `count`
 #       Make sure to set the value format to JSON
+CREATE TABLE we
+  (station_id INT,
+   station_name VARCHAR,
+   line VARCHAR
+   )
+  WITH (KAFKA_TOPIC='com.cta.weather',
+        VALUE_FORMAT='avro',
+        KEY='station_id');
 
+        SELECT STATION_ID FROM WA LIMIT 10;
 KSQL_STATEMENT = """
 CREATE TABLE turnstile (
     ???

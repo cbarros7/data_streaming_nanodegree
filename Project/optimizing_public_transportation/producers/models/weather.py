@@ -8,6 +8,8 @@ import urllib.parse
 
 import requests
 
+from confluent_kafka import avro
+
 from models.producer import Producer
 
 
@@ -37,11 +39,13 @@ class Weather(Producer):
         #
         #
         super().__init__(
-            "weather", # TODO: Come up with a better topic name
-            key_schema=Weather.key_schema,
-            value_schema=Weather.value_schema,
+            "com.cta.weather", # TODO: Come up with a better topic name
+            key_schema = Weather.key_schema,
+            value_schema = Weather.value_schema,
+            num_partitions = 5,
+            num_replicas = 1,
         )
-
+        self.topic_name = "com.cta.weather"
         self.status = Weather.status.sunny
         self.temp = 70.0
         if month in Weather.winter_months:
@@ -79,31 +83,71 @@ class Weather(Producer):
         # specify the Avro schemas and verify that you are using the correct Content-Type header.
         #
         #
-        logger.info("weather kafka proxy integration incomplete - skipping")
-        #resp = requests.post(
-        #    #
-        #    #
-        #    # TODO: What URL should be POSTed to?
-        #    #
-        #    #
-        #    f"{Weather.rest_proxy_url}/TODO",
-        #    #
-        #    #
-        #    # TODO: What Headers need to bet set?
-        #    #
-        #    #
-        #    headers={"Content-Type": "TODO"},
-        #    data=json.dumps(
-        #        {
-        #            #
-        #            #
-        #            # TODO: Provide key schema, value schema, and records
-        #            #
-        #            #
-        #        }
-        #    ),
-        #)
-        #resp.raise_for_status()
+        
+        #logger.info("weather kafka proxy integration incomplete - skipping")
+        resp = requests.post(
+           #
+           #
+           # TODO: What URL should be POSTed to?
+           #
+           #
+           f"{Weather.rest_proxy_url}/topics/{self.topic_name}",
+           #
+           #
+           # TODO: What Headers need to bet set?
+           #
+           #
+           headers={"Content-Type": "application/vnd.kafka.avro.v2+json"},
+           data=json.dumps(
+               {
+                   #
+                   #
+                   # TODO: Provide key schema, value schema, and records
+                   #
+                   #
+
+                    "value_schema":json.dumps({
+                                                "namespace": "com.udacity",
+                                                "type": "record",
+                                                "name": "weather.value",
+                                                "fields": [
+                                                    {
+                                                    "name": "temperature", "type": "int"
+                                                    },
+
+                                                    {
+                                                    "name": "status", "type": "string"
+                                                    }
+                                                ]
+                                                }),
+
+                    "key_schema": json.dumps({
+                                                "namespace": "com.udacity",
+                                                "type": "record",
+                                                "name": "weather.key",
+                                                "fields": [
+                                                    {
+                                                    "name": "timestamp",
+                                                    "type": "long"
+                                                    }
+                                                ]
+                                                }
+                                                ),
+                    "records": [ #A list of records to produce to the topic.
+                        {
+                            "key": {
+                                "timestamp": self.time_millis()
+                            },
+                            "value": {
+                                "status": self.status.name,
+                                "temperature": self.temp
+                            }
+                        }
+                    ]
+               }
+           ),
+        )
+        resp.raise_for_status()
 
         logger.debug(
             "sent weather data to kafka, temp: %s, status: %s",
