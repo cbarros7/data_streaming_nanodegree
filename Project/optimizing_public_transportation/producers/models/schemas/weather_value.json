@@ -1,5 +1,5 @@
 {
-  "namespace": "com.udacity.weather",
+  "namespace": "com.cta.weather",
   "type": "record",
   "name": "weather.value",
   "fields": [
