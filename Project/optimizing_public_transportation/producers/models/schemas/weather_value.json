@@ -1,5 +1,5 @@
 {
-  "namespace": "com.cta.weather",
+  "namespace": "com.cta",
   "type": "record",
   "name": "weather.value",
   "fields": [

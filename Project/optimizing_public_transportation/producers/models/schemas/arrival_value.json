@@ -1,5 +1,5 @@
 {
-  "namespace": "com.cta.stations",
+  "namespace": "com.cta",
   "type": "record",
   "name": "arrival.value",
   "fields": [

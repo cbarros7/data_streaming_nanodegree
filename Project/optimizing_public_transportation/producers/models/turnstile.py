@@ -38,7 +38,7 @@ class Turnstile(Producer):
         #
         #
         super().__init__(
-            f"{station_name}", # TODO: Come up with a better topic name
+            topic_name = "org.chicago.cta.station.turnstile.v1", # TODO: Come up with a better topic name
             key_schema=Turnstile.key_schema,
             value_schema=Turnstile.value_schema, #TODO: Uncomment once schema is defined
             num_partitions = 5,
@@ -67,4 +67,6 @@ class Turnstile(Producer):
                     "station_name": self.station.name,
                     "line": self.station.color.name
                 }
-            ) 
+            )
+            
+        print(f"Topic: {self.topic_name}, number entries: {num_entries}")
