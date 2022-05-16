@@ -10,7 +10,7 @@ import topic_check
 logger = logging.getLogger(__name__)
 
 
-KSQL_URL = "http://localhost:8088"
+KSQL_URL = "http://localhost:3000"
 
 #
 # TODO: Complete the following KSQL statements.
@@ -24,20 +24,19 @@ KSQL_URL = "http://localhost:8088"
 
 KSQL_STATEMENT = """
 CREATE TABLE turnstile (
-    station_id INT,
+    station_id INTEGER,
     station_name VARCHAR,
-    line VARCHAR
-) WITH (
-    KAFKA_TOPIC = 'org.chicago.cta.stations.table.v1',
-    VALUE_FORMAT = 'avro',
-    KEY = 'station_id'
+    line VARCHAR)
+    WITH (
+    KAFKA_TOPIC='org.chicago.cta.station.turnstile.v1',
+    VALUE_FORMAT='AVRO',
+    key='station_id'
 );
-
 CREATE TABLE turnstile_summary
-WITH (VALUE_FORMAT = 'json') AS
-    SELECT station_id, COUNT(station_id), 
-    FROM turnstile
-    GROUP BY station_id;
+WITH (value_format='JSON') AS
+    select station_id, count(station_id) as count
+    from turnstile
+    group by station_id;
 """
 
 
@@ -58,7 +57,7 @@ def execute_statement():
             }
         ),
     )
-    return 
+    #return 
     # Ensure that a 2XX status code was returned
     try:
         resp.raise_for_status()
