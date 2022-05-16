@@ -38,7 +38,7 @@ class Turnstile(Producer):
         #
         #
         super().__init__(
-            topic_name = "org.chicago.cta.station.turnstile.v1", # TODO: Come up with a better topic name
+            topic_name="org.chicago.cta.station.turnstile.v1",
             key_schema=Turnstile.key_schema,
             value_schema=Turnstile.value_schema, #TODO: Uncomment once schema is defined
             num_partitions = 5,
@@ -52,9 +52,9 @@ class Turnstile(Producer):
         num_entries = self.turnstile_hardware.get_entries(timestamp, time_step)
         logger.info("turnstile kafka integration complete")
 
-        # print(f"TYPE station_id {type(self.station.station_id)}")
-        # print(f"TYPE name {type(self.station.name)}")
-        # print(f"TYPE color name {type(self.station.color.name)}")
+        # print(f"TIPO station_id {type(self.station.station_id)}")
+        # print(f"TIPO name {type(self.station.name)}")
+        # print(f"TIPO color name {type(self.station.color.name)}")
         
         # TODO: Complete this function by emitting a message to the turnstile topic for the number
         # of entries that were calculated
@@ -67,6 +67,4 @@ class Turnstile(Producer):
                     "station_name": self.station.name,
                     "line": self.station.color.name
                 }
-            )
-            
-        print(f"Topic: {self.topic_name}, number entries: {num_entries}")
+            ) 
