@@ -39,13 +39,12 @@ class Weather(Producer):
         #
         #
         super().__init__(
-            "com.cta.weather", # TODO: Come up with a better topic name
+            topic_name = "org.chicago.cta.weather.v1", # TODO: Come up with a better topic name
             key_schema = Weather.key_schema,
             value_schema = Weather.value_schema,
             num_partitions = 5,
             num_replicas = 1,
         )
-        self.topic_name = "com.cta.weather"
         self.status = Weather.status.sunny
         self.temp = 70.0
         if month in Weather.winter_months:
