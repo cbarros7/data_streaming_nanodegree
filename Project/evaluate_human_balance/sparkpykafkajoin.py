@@ -203,8 +203,8 @@ eventStreamingDF.withColumn("value",from_json("value",eventsJSONSchema))\
 customerRiskStreamingDF = spark.sql("select customer, score from CustomerRisk")
 
 # TO-DO: join the streaming dataframes on the email address to get the risk score and the birth year in the same dataframe
-finalResultDF = emailAndBirthYearStreamingDF.join(customerRiskStreamingDF, expr("""
-    email = customer
+finalResultDF = customerRiskStreamingDF.join(emailAndBirthYearStreamingDF, expr("""
+    customer=email
 """                                                                                 
 ))
 
@@ -222,7 +222,16 @@ finalResultDF = emailAndBirthYearStreamingDF.join(customerRiskStreamingDF, expr(
 # +--------------------+-----+--------------------+---------+
 #
 
-finalResultDF.writeStream.outputMode("append").format("console").option("truncate", "false").start().awaitTermination()
+#finalResultDF.writeStream.outputMode("append").format("console").option("truncate", "false").start().awaitTermination()
+
+finalResultDF.selectExpr("CAST(customer AS STRING) AS key", "to_json(struct(*)) AS value")\
+    .writeStream \
+    .format("kafka") \
+    .option("kafka.bootstrap.servers", "localhost:9092")\
+    .option("topic", "com.app.risk.score")\
+    .option("checkpointLocation","/tmp/kafkacheckpoint")\
+    .start()\
+    .awaitTermination()
 
 
 # In this JSON Format {"customer":"Santosh.Fibonnaci@test.com","score":"28.5","email":"Santosh.Fibonnaci@test.com","birthYear":"1963"} 
