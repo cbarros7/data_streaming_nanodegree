@@ -3,75 +3,28 @@
 [![lisence](https://img.shields.io/github/license/cbarros7/ml_engineer_nanodegree?style=plastic)](https://github.com/cbarros7/ml_engineer_nanodegree/blob/main/LICENSE)
 [![Twitter Carlos](https://img.shields.io/twitter/follow/cbarros27?label=CarlosBarros&style=social)](https://twitter.com/cbarros27)
 
-
-## Installation 
-### 1. Clone the repository
-Use the following command to clone the repository: 
-
-Then enter the [Configuration](./data_streaming_nanodegree-/Configuration/) folder and run the ``config.sh`` command. 
-
-* Give necessary run permissions: ``chmod u+x *.sh``
-* Execute the script: ``sudo sh /home/$USER/data_streaming_nanodegree/Configuration/installDocker.sh``
-* The following commands are used to run the Docker command without Sudo. Type the following commands in the terminal: 
-
-```
-sudo usermod -aG docker ${USER}
-su - ${USER}
-```
-
-* Finally, execute the script: ``sudo sh /home/$USER/data_streaming_nanodegree/Configuration/config.sh``
-
-### 2. Additional configuration 
-
-Once the script is finished, please copy and paste the following script into the terminal: 
-
-```
-export PATH=$PATH:/home/$USER/kafka_2.13-3.1.0/bin
-source ~/.bashrc
-```
-
-And finally, the following script is executed to prepare the environment that will be used to work with Udacity.
-
-``
-sudo sh /home/$USER/data_streaming_nanodegree/startup.sh
-``
+## Description :speech_balloon:
+This course is primarily aimed at building streaming-based applications using Apache Spark, Kafka, Spark Streaming and Kafka Streaming.
 
 
-### 3. First commands with Kafka
-##### Create a topic with 3 partitions and a replica
+## Structure :hammer:
+The following is the main structure of the program with the projects developed in each of them:  
 
-```
-kafka-topics.sh --create --bootstrap-server localhost:9092 --topic "test"  --replication-factor 1 --partitions 1
-```
-
-##### List topics
-```
-kafka-topics --list --bootstrap-server localhost:9092
-```
-
-kafka-console-producer --topic "test2" --broker-list localhost:9092
-
-kafka-console-consumer --topic "test2" --bootstrap-server localhost:9092
-
-##### Describe the previously created topic
-```
-kafka-topics.sh --zookeper localhost:2181 --topic "test" --describe
-```
-
-
-## Disclaimer
-
-This script is based on the course taken at **A Cloud Guru** called [Kafka deep dive](https://github.com/linuxacademy/content-kafka-deep-dive). It has been updated to the latest version of *Zookeeper*. 
-
-
+**1.) Data Ingestion with Kafka & Kafka Streaming**:
+ + **Objective:** Learn to use REST Proxy, Kafka Connect, KSQL, and Faust Python Stream Processing and use it to stream public transit statuses using Kafka and Kafka ecosystem to build a stream processing application that shows the status of trains in real-time. 
+ + **Project:** [Optimizing Public Transportation](./Project/optimizing_public_transportation)
 
 <br>
+
+ **2.) Streaming API Development and Documentation**:
+ + **Objective:** To identify components of Spark Streaming (architecture and API), build a continuous application with Structured Streaming, consume and process data from Apache Kafka with Spark Structured Streaming (including setting up and running a Spark Cluster), create a DataFrame as an aggregation of source DataFrames, sink a composite DataFrame to Kafka, and visually inspect a data sink for accuracy.
+ + **Project:** [Evaluate Human Balance with Spark Streaming](./Project/evaluate_human_balance)
 
 ## Acknowledgements :pray:
 Thanks to all the teachers, mentors and colleagues of **Udacity** who have been supportive in this nanodegree. It was undoubtedly a great experience both personally and professionally.
 
 
-For more information about course on Udacity, visit this [link](https://www.udacity.com/course/data-streaming-nanodegree--nd029).
+For more information about course on Udacity, visit this [link](https://www.udacity.com/course/machine-learning-engineer-nanodegree--nd009t).
 
 <br>
 
